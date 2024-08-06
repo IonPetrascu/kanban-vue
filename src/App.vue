@@ -5,9 +5,9 @@ type Item = {
   id: number
   title: string
   categoryId: number
-  difficulty: string
+  difficulty?: string
   description?: string
-  usersId: number[]
+  usersId?: number[]
 }
 type Category = {
   id: number
