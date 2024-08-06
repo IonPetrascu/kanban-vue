@@ -69,6 +69,8 @@ const users = ref<User[]>([
     email: 'ana@gmail.com'
   }
 ])
+const taskTitle = ref<string>('')
+const showAddTaskForm = ref<boolean>(false)
 
 const getQuantityInCategory = (categoryId: number): number => {
   return items.value.reduce(
@@ -97,6 +99,24 @@ const onDrop = (event: DragEvent, categoryId: number): void => {
     return x
   })
 }
+
+const addTask = (categoryId: number): void | undefined => {
+  if (taskTitle.value === '') return
+  items.value.push({
+    id: Math.floor(Math.random() * 1000),
+    title: taskTitle.value,
+    categoryId: categoryId
+  })
+  taskTitle.value = ''
+}
+
+const openTaskForm = () => {
+  showAddTaskForm.value = true
+}
+const closeTaskForm = () => {
+  showAddTaskForm.value = false
+  taskTitle.value = ''
+}
 </script>
 
 <template>
@@ -118,9 +138,36 @@ const onDrop = (event: DragEvent, categoryId: number): void => {
         </div>
 
         <div>
-          <button class="add-task">
+            <button v-if="!showAddTaskForm" @click="openTaskForm" class="add-task">
             <img src="./assets/plus.svg" alt="add button" /> <span>Add new task</span>
           </button>
+            <form
+              v-if="showAddTaskForm"
+              class="add-task-form"
+              @submit.prevent="addTask(category.id)"
+            >
+              <textarea v-model="taskTitle" name="textarea"></textarea>
+              <div class="add-task-buttons">
+                <button type="sumbit" class="add-task-btn">Add new task</button>
+                <button @click="closeTaskForm" type="button" class="close-task-btn">
+                  <svg
+                    width="24"
+                    height="24"
+                    role="presentation"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12Z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </button>
+              </div>
+            </form>
         </div>
         <ul @dragover.prevent @dragenter.prevent @drop="onDrop($event, category.id)" class="list">
           <div
@@ -133,7 +180,7 @@ const onDrop = (event: DragEvent, categoryId: number): void => {
             <span :class="`difficulty difficulty-${item.difficulty}`">{{ item.difficulty }}</span>
             <h4>{{ item.title }}</h4>
             <p class="description">{{ item.description }}</p>
-            <div class="users-list">
+              <div v-if="item.usersId" class="users-list">
               <div
                 :title="user?.name"
                 class="item-user"
@@ -205,6 +252,7 @@ h2 {
   gap: 20px;
   background: #ebecf0;
   flex: 1;
+  overflow-y: auto;
 }
 
 .list-item {
@@ -297,5 +345,40 @@ h2 {
 
 .add-task span {
   font-size: 20px;
+}
+.add-task-form {
+  margin-bottom: 15px;
+}
+.add-task-form textarea {
+  width: 100%;
+  resize: none;
+  margin: 0;
+  padding: 8px 12px;
+  overflow: hidden;
+  overflow-y: auto;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--ds-surface-raised, #ffffff);
+  box-shadow: var(--ds-shadow-raised, 0px 1px 1px #091e4240, 0px 0px 1px #091e424f);
+  resize: none;
+  overflow-wrap: break-word;
+}
+.add-task-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+.add-task-btn {
+  padding: 10px;
+  background: #6ee7b7;
+  border-radius: 8px;
+  border: none;
+}
+.close-task-btn {
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  border: none;
 }
 </style>
