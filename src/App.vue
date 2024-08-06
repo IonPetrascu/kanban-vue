@@ -130,17 +130,19 @@ const closeTaskForm = () => {
         </ul>
       </nav>
     </div>
-    <div class="board">
-      <div class="col" v-for="category in categories" :key="category.id">
-        <div class="col-header">
-          <h2>{{ category.title }}</h2>
-          <span>{{ getQuantityInCategory(category.id) }}</span>
-        </div>
+    <div class="main">
+      <div class="header">header</div>
+      <div class="board">
+        <div class="col" v-for="category in categories" :key="category.id">
+          <div class="col-header">
+            <h2>{{ category.title }}</h2>
+            <span>{{ getQuantityInCategory(category.id) }}</span>
+          </div>
 
-        <div>
+          <div>
             <button v-if="!showAddTaskForm" @click="openTaskForm" class="add-task">
-            <img src="./assets/plus.svg" alt="add button" /> <span>Add new task</span>
-          </button>
+              <img src="./assets/plus.svg" alt="add button" /> <span>Add new task</span>
+            </button>
             <form
               v-if="showAddTaskForm"
               class="add-task-form"
@@ -168,31 +170,32 @@ const closeTaskForm = () => {
                 </button>
               </div>
             </form>
-        </div>
-        <ul @dragover.prevent @dragenter.prevent @drop="onDrop($event, category.id)" class="list">
-          <div
-            class="list-item"
-            draggable="true"
-            @dragstart="ondragstart($event, item)"
-            :key="item.id"
-            v-for="item in items.filter((item) => item.categoryId === category.id)"
-          >
-            <span :class="`difficulty difficulty-${item.difficulty}`">{{ item.difficulty }}</span>
-            <h4>{{ item.title }}</h4>
-            <p class="description">{{ item.description }}</p>
+          </div>
+          <ul @dragover.prevent @dragenter.prevent @drop="onDrop($event, category.id)" class="list">
+            <div
+              class="list-item"
+              draggable="true"
+              @dragstart="ondragstart($event, item)"
+              :key="item.id"
+              v-for="item in items.filter((item) => item.categoryId === category.id)"
+            >
+              <span :class="`difficulty difficulty-${item.difficulty}`">{{ item.difficulty }}</span>
+              <h4>{{ item.title }}</h4>
+              <p class="description">{{ item.description }}</p>
               <div v-if="item.usersId" class="users-list">
-              <div
-                :title="user?.name"
-                class="item-user"
-                :key="user?.id"
-                v-for="user in item.usersId.map(getUserById)"
-              >
-                <img v-if="user?.id === 0" src="/src/assets/user-0.png" alt="" />
-                <img v-else src="/src/assets/user-1.png" alt="" />
+                <div
+                  :title="user?.name"
+                  class="item-user"
+                  :key="user?.id"
+                  v-for="user in item.usersId.map(getUserById)"
+                >
+                  <img v-if="user?.id === 0" src="/src/assets/user-0.png" alt="" />
+                  <img v-else src="/src/assets/user-1.png" alt="" />
+                </div>
               </div>
             </div>
-          </div>
-        </ul>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -217,11 +220,20 @@ const closeTaskForm = () => {
   background: rgba(255, 0, 0, 0.212);
   color: white;
 }
-.board {
+.main {
   width: 80%;
+}
+.header {
+  background: whitesmoke;
+  border-bottom: 1px solid #666;
+  height: 10%;
+}
+.board {
+  width: 100%;
   background: whitesmoke;
   display: flex;
   overflow-x: auto;
+  height: 100%;
 }
 .col {
   padding: 30px 10px 10px;
