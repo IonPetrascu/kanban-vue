@@ -86,7 +86,6 @@ const ondragstart = (event: DragEvent, item: Item): void => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
   event.dataTransfer.setData('itemId', item.id.toString())
-  console.log('start')
 }
 const onDrop = (event: DragEvent, categoryId: number): void => {
   if (event.dataTransfer === null) return
@@ -94,7 +93,6 @@ const onDrop = (event: DragEvent, categoryId: number): void => {
   items.value = items.value.map((x) => {
     if (x.id === itemId) {
       x.categoryId = categoryId
-      console.log('end')
     }
     return x
   })
@@ -295,9 +293,6 @@ h2 {
 .add-task img {
   width: 20px;
   height: 20px;
-}
-.add-task:hover img {
-  transform: rotate(45deg);
 }
 
 .add-task span {
