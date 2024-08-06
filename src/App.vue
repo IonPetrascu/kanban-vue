@@ -1,23 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { provide, ref } from 'vue'
+import TheBoard from './components/TheBoard.vue'
+import type { Item, Category, User } from './types'
 
-type Item = {
-  id: number
-  title: string
-  categoryId: number
-  difficulty: string
-  description?: string
-  usersId: number[]
-}
-type Category = {
-  id: number
-  title: string
-}
-type User = {
-  id: number
-  name: string
-  email: string
-}
 const items = ref<Item[]>([
   {
     id: 0,
@@ -70,7 +55,7 @@ const users = ref<User[]>([
   }
 ])
 
-const getQuantityInCategory = (categoryId: number): number => {
+const quantityTasksInBoard = (categoryId: number): number => {
   return items.value.reduce(
     (acc: number, item: Item) => (acc += item.categoryId === categoryId ? 1 : 0),
     0
@@ -86,19 +71,33 @@ const ondragstart = (event: DragEvent, item: Item): void => {
   event.dataTransfer.dropEffect = 'move'
   event.dataTransfer.effectAllowed = 'move'
   event.dataTransfer.setData('itemId', item.id.toString())
-  console.log('start')
 }
+
 const onDrop = (event: DragEvent, categoryId: number): void => {
   if (event.dataTransfer === null) return
   const itemId = parseInt(event.dataTransfer.getData('itemId'))
   items.value = items.value.map((x) => {
     if (x.id === itemId) {
       x.categoryId = categoryId
-      console.log('end')
     }
     return x
   })
 }
+
+const addTask = (categoryId: number, title: string): void | undefined => {
+  items.value.push({
+    id: Math.floor(Math.random() * 1000),
+    title: title,
+    categoryId: categoryId
+  })
+}
+
+provide('quantityTasksInBoard', quantityTasksInBoard)
+provide('addTask', addTask)
+provide('items', items)
+provide('getUserById', getUserById)
+provide('ondragstart', ondragstart)
+provide('onDrop', onDrop)
 </script>
 
 <template>
@@ -112,43 +111,9 @@ const onDrop = (event: DragEvent, categoryId: number): void => {
         </ul>
       </nav>
     </div>
-    <div class="board">
-      <div class="col" v-for="category in categories" :key="category.id">
-        <div class="col-header">
-          <h2>{{ category.title }}</h2>
-          <span>{{ getQuantityInCategory(category.id) }}</span>
-        </div>
-
-        <div>
-          <button class="add-task">
-            <img src="./assets/plus.svg" alt="add button" /> <span>Add new task</span>
-          </button>
-        </div>
-        <ul @dragover.prevent @dragenter.prevent @drop="onDrop($event, category.id)" class="list">
-          <div
-            class="list-item"
-            draggable="true"
-            @dragstart="ondragstart($event, item)"
-            :key="item.id"
-            v-for="item in items.filter((item) => item.categoryId === category.id)"
-          >
-            <span :class="`difficulty difficulty-${item.difficulty}`">{{ item.difficulty }}</span>
-            <h4>{{ item.title }}</h4>
-            <p class="description">{{ item.description }}</p>
-            <div class="users-list">
-              <div
-                :title="user?.name"
-                class="item-user"
-                :key="user?.id"
-                v-for="user in item.usersId.map(getUserById)"
-              >
-                <img v-if="user?.id === 0" src="/src/assets/user-0.png" alt="" />
-                <img v-else src="/src/assets/user-1.png" alt="" />
-              </div>
-            </div>
-          </div>
-        </ul>
-      </div>
+    <div class="main">
+      <div class="header">header</div>
+      <TheBoard :categories="categories" />
     </div>
   </div>
 </template>
@@ -172,135 +137,12 @@ const onDrop = (event: DragEvent, categoryId: number): void => {
   background: rgba(255, 0, 0, 0.212);
   color: white;
 }
-.board {
+.main {
   width: 80%;
+}
+.header {
   background: whitesmoke;
-  display: flex;
-  overflow-x: auto;
-}
-.col {
-  padding: 30px 10px 10px;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  width: clamp(300px, 100%, 300px);
-  border-right: 1px solid #666;
-}
-
-.col-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-.col-header span {
-  padding: 2px;
-  font-weight: 600;
-  font-size: 20px;
-}
-h2 {
-  text-align: center;
-}
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background: #ebecf0;
-  flex: 1;
-}
-
-.list-item {
-  border: 1px solid #666;
-  border-radius: 4px;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  cursor: pointer;
-}
-.list-item:hover {
-  box-shadow: 0 3px 0 0 #b2b8c4;
-}
-.description {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* difficulty */
-.difficulty {
-  font-weight: 500;
-  line-height: 133%;
-  padding: 5px 10px;
-  border-radius: 15px;
-  width: max-content;
-}
-.difficulty-low {
-  background: #d1fae5;
-  color: #065f46;
-  border: 0.7px solid #6ee7b7;
-}
-.difficulty-high {
-  color: #991b1b;
-  background: #fee2e2;
-  border: 0.7px solid #fca5a5;
-}
-.difficulty-medium {
-  color: #92400e;
-  background: #fef3c7;
-  border: 0.7px solid #fcd34d;
-}
-
-/*  */
-.users-list {
-  display: flex;
-  justify-content: end;
-}
-.item-user {
-  width: 45px;
-  height: 45px;
-  position: relative;
-  transition: all 0.2s ease-in-out;
-}
-.item-user:hover {
-  scale: 1.05;
-  z-index: 1;
-}
-.item-user:not(:last-child) {
-  margin-right: -10px;
-}
-
-/* add task */
-.add-task {
-  border: none;
-  width: 100%;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  border-radius: 10px;
-  padding: 5px;
-  margin-bottom: 15px;
-  cursor: pointer;
-  background: transparent;
-  border: 1px solid rgb(211, 208, 208);
-  transition:
-    background-color 0.4s ease,
-    scale 0.3s ease;
-}
-.add-task:hover {
-  background-color: rgb(224, 224, 224);
-}
-.add-task img {
-  width: 20px;
-  height: 20px;
-}
-.add-task:hover img {
-  transform: rotate(45deg);
-}
-
-.add-task span {
-  font-size: 20px;
+  border-bottom: 1px solid #666;
+  height: 10%;
 }
 </style>
