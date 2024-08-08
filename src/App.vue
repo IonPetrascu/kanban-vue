@@ -60,6 +60,7 @@ const users = ref<User[]>([
     email: 'divaSaya@gmail.com'
   }
 ])
+
 const isVisibleTaskPopup = ref<boolean>(false)
 const currentTaskInPopup = ref<Item | null>(null)
 
@@ -117,13 +118,16 @@ const getTaskMembers = (usersId: number[]): User[] => {
   return users.value.filter((user) => usersId.includes(user.id))
 }
 
-const addUserToTask = (userId: number) => {
-  if (currentTaskInPopup.value) {
-    currentTaskInPopup.value.usersId?.push(userId)
+const addUserToTask = (userId: number): void => {
+  if (!currentTaskInPopup.value) return
+
+  const existingUsers = currentTaskInPopup.value.usersId || []
+  if (!existingUsers.includes(userId)) {
+    currentTaskInPopup.value.usersId = [...existingUsers, userId]
   }
 }
 
-const removeUserFromTask = (userId: number) => {
+const removeUserFromTask = (userId: number): void => {
   if (currentTaskInPopup.value) {
     currentTaskInPopup.value.usersId = currentTaskInPopup.value.usersId?.filter(
       (id) => id !== userId
@@ -131,8 +135,23 @@ const removeUserFromTask = (userId: number) => {
   }
 }
 
+const updateCategory = (categoryId: number): void => {
+  if (currentTaskInPopup.value) {
+    currentTaskInPopup.value.categoryId = categoryId
+  }
+}
+
+const updateTitle = (title: string): void => {
+  if (currentTaskInPopup.value) currentTaskInPopup.value.title = title
+}
+
+const updateDescription = (description: string): void => {
+  if (currentTaskInPopup.value) currentTaskInPopup.value.description = description
+}
+
 provide('users', users)
 provide('items', items)
+provide('categories', categories)
 provide('quantityTasksInBoard', quantityTasksInBoard)
 provide('getTaskMembers', getTaskMembers)
 provide('openTaskPopup', openTaskPopup)
@@ -166,6 +185,9 @@ provide('onDrop', onDrop)
     @get-user-by-id="getUserById"
     @remove-user-from-task="removeUserFromTask"
     @add-user-to-task="addUserToTask"
+    @update-category="updateCategory"
+    @update-title="updateTitle"
+    @update-description="updateDescription"
   />
 </template>
 

@@ -1,21 +1,22 @@
 <script lang="ts" setup>
-import { computed, inject, ref } from 'vue'
-import type { Item, User } from '../types'
+import { computed, inject, ref, watch } from 'vue'
+import type { Item, User, Category } from '../types'
 
+// Props
 const props = defineProps<{
   isVisible: Boolean
   task: Item | null
   users: User[]
 }>()
 
+// Reactive References
 const showUsersList = ref<boolean>(false)
 const filteredListMembers = ref<string>('')
+const currentCategory = ref<number>(0)
+const currentTile = ref<string>('')
+const currentDescription = ref<string>('')
 
-const isMemberOfTask = (userId: number) => {
-  if (!props.task || !props.task.usersId) return false
-  return Object.values(props.task.usersId).includes(userId)
-}
-
+// Computed Properties
 const filteredUsers = computed((): User[] => {
   if (!filteredListMembers.value) {
     return props.users ?? []
@@ -25,24 +26,61 @@ const filteredUsers = computed((): User[] => {
   }
 })
 
+// Functions
+const isMemberOfTask = (userId: number): boolean => {
+  if (!props.task || !props.task.usersId) return false
+  return Object.values(props.task.usersId).includes(userId)
+}
+
 const toggleUsersList = (): void => {
   showUsersList.value = !showUsersList.value
 }
 
-const emit = defineEmits(['closePopup', 'addUserToTask', 'removeUserFromTask'])
+// Watchers
+watch(
+  () => props.task,
+  (newTask) => {
+    if (newTask === null) return
+
+    if (newTask.categoryId !== undefined) {
+      currentCategory.value = newTask.categoryId
+    }
+
+    currentTile.value = newTask.title
+    currentDescription.value = newTask.description ?? ''
+  },
+  { immediate: true }
+)
+
+watch(currentCategory, () => emit('updateCategory', currentCategory.value))
+watch(currentTile, () => emit('updateTitle', currentTile.value))
+watch(currentDescription, () => emit('updateDescription', currentDescription.value))
+
+// Injected Dependencies
 const getUserById = inject<(id: number) => User | undefined>('getUserById')
+const categories = inject<Category[]>('categories')
 
 if (!getUserById) {
   throw new Error('getUserById injection is missing')
 }
+
+// Emits
+const emit = defineEmits([
+  'closePopup',
+  'addUserToTask',
+  'removeUserFromTask',
+  'updateCategory',
+  'updateTitle',
+  'updateDescription'
+])
 </script>
 <template>
   <div class="wrapper" :class="{ active: isVisible, hidden: !isVisible }">
     <div v-if="task !== null">
       <button @click="emit('closePopup')">close</button>
-      <input :value="task.title" class="title" type="text" />
-      <textarea class="description" :value="task.description"></textarea>
-      <div class="users-wrapper">
+      <input v-model="currentTile" class="title" type="text" />
+      <textarea class="description" v-model="currentDescription"></textarea>
+      <div v-if="getUserById" class="users-wrapper">
         <ul class="user-list" v-if="task.usersId">
           <li :key="user?.id" v-for="user in task.usersId.map(getUserById)">
             <div class="user">
@@ -62,7 +100,7 @@ if (!getUserById) {
           <div>
             <div class="head">Board members</div>
             <input v-model="filteredListMembers" placeholder="Search users..." type="text" />
-            <ul v-if="filteredUsers">
+            <ul v-if="filteredUsers.length > 0">
               <li :key="user.id" v-for="user in filteredUsers">
                 <button
                   :class="{ 'user-is-meneber': isMemberOfTask(user.id) }"
@@ -80,6 +118,15 @@ if (!getUserById) {
             </ul>
             <span v-else>empty list</span>
           </div>
+        </div>
+        <div>
+          <select v-model="currentCategory">
+            <option :key="category.id" :value="category.id" v-for="category in categories">
+              {{ category.title }}
+              {{ currentCategory }}
+            </option>
+          </select>
+          <div>Selected: {{ currentCategory }}</div>
         </div>
       </div>
     </div>
