@@ -1,17 +1,24 @@
 <script lang="ts" setup>
 import { inject } from 'vue'
-
+import type { Item } from '../types'
 defineProps({
   categoryId: Number
 })
 
-const items = inject('items')
+const items = inject<Item[]>('items')
 const getUserById = inject('getUserById')
 const ondragstart = inject('ondragstart')
 const onDrop = inject('onDrop')
+const openTaskPopup = inject('openTaskPopup')
 </script>
 <template>
-  <ul @dragover.prevent @dragenter.prevent @drop="onDrop($event, categoryId)" class="list">
+  <ul
+    v-if="items"
+    @dragover.prevent
+    @dragenter.prevent
+    @drop="onDrop($event, categoryId)"
+    class="list"
+  >
     <div
       class="list-item"
       draggable="true"
@@ -22,6 +29,7 @@ const onDrop = inject('onDrop')
       <span :class="`difficulty difficulty-${item.difficulty}`">{{ item.difficulty }}</span>
       <h4>{{ item.title }}</h4>
       <p class="description">{{ item.description }}</p>
+      <button @click="openTaskPopup(item.id)">open</button>
       <div v-if="item.usersId" class="users-list">
         <div
           :title="user?.name"
