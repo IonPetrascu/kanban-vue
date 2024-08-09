@@ -164,16 +164,33 @@ provide('onDrop', onDrop)
 <template>
   <div class="wrapper">
     <div class="bar">
+      <div class="bar-header">
+        <img src="/src/assets/logo.png" alt="kanban logo" />
+        <span>kanban</span>
+      </div>
       <nav class="nav">
         <ul>
-          <li>Dashboard</li>
-          <li>Order</li>
-          <li>Kanban</li>
+          <li class="active-board">
+            <button class="dashboard-btn">
+              <img src="/src/assets/layout.svg" alt="layout" />
+              <span>Dashboard 1</span>
+            </button>
+          </li>
+          <li>
+            <button class="dashboard-btn">
+              <img src="/src/assets/layout.svg" alt="layout" /> <span>Dashboard 2</span>
+            </button>
+          </li>
+          <li>
+            <button class="dashboard-btn">
+              <img src="/src/assets/layout.svg" alt="layout" /> <span>Dashboard 3</span>
+            </button>
+          </li>
         </ul>
       </nav>
     </div>
     <div class="main">
-      <div class="header">header</div>
+      <div class="header">Dashboard 1</div>
       <TheBoard :categories="categories" />
     </div>
   </div>
@@ -189,33 +206,110 @@ provide('onDrop', onDrop)
     @update-title="updateTitle"
     @update-description="updateDescription"
   />
+  <button class="add-col-btn">
+    <img src="/src/assets/plus.svg" alt="plus" />
+  </button>
 </template>
 
 <style scoped>
 .wrapper {
-  width: 1320px;
-  padding: 0px 10px;
   margin: 0 auto;
   display: flex;
   height: 100%;
 }
+.nav {
+  padding-block: 10px;
+}
+.nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-right: 20px;
+}
 .nav ul li {
+  padding: 15px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  cursor: pointer;
+}
+.nav ul li:hover {
+  background-color: var(--color-3);
+}
+.nav ul .active-board {
+  background-color: var(--color-3);
+}
+.dashboard-btn {
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dashboard-btn span {
+  color: var(--white);
   font-weight: 400;
   font-size: 20px;
   line-height: 150%;
-  color: #111827;
 }
+.dashboard-btn img {
+  width: 30px;
+}
+
 .bar {
   width: 20%;
-  background: rgba(255, 0, 0, 0.212);
-  color: white;
+  background: var(--color-1);
+  border-right: 3px solid var(--color-4);
 }
 .main {
   width: 80%;
+  display: flex;
+  flex-direction: column;
 }
 .header {
-  background: whitesmoke;
-  border-bottom: 1px solid #666;
+  background: var(--color-1);
+  border-bottom: 3px solid var(--color-4);
   height: 10%;
+  font-size: 30px;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  padding-inline: 20px;
+}
+.bar-header {
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding-left: 20px;
+  gap: 7px;
+}
+.bar-header span {
+  font-size: 30px;
+  color: var(--white);
+  font-weight: 600;
+}
+.bar-header img {
+  width: 40px;
+  height: 40px;
+}
+.add-col-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-3);
+  border: none;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
+  cursor: pointer;
+}
+.add-col-btn:hover img {
+  transform: scale(1.19);
+}
+.add-col-btn img {
+  width: 100%;
 }
 </style>

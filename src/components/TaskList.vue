@@ -26,10 +26,14 @@ const openTaskPopup = inject('openTaskPopup')
       :key="item.id"
       v-for="item in items.filter((item) => item.categoryId === categoryId)"
     >
-      <span :class="`difficulty difficulty-${item.difficulty}`">{{ item.difficulty }}</span>
-      <h4>{{ item.title }}</h4>
+      <span v-if="item.difficulty" :class="`difficulty difficulty-${item.difficulty}`">{{
+        item.difficulty
+      }}</span>
+      <h4 class="title">{{ item.title }}</h4>
       <p class="description">{{ item.description }}</p>
-      <button @click="openTaskPopup(item.id)">open</button>
+      <button class="open-popup-btn" @click="openTaskPopup(item.id)">
+        <img src="/src/assets/edit.svg" alt="edit" />
+      </button>
       <div v-if="item.usersId" class="users-list">
         <div
           :title="user?.name"
@@ -49,22 +53,27 @@ const openTaskPopup = inject('openTaskPopup')
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: #ebecf0;
+  background: var(--color-2);
   flex: 1;
   overflow-y: auto;
 }
-
+.title {
+  color: var(--white);
+  font-weight: 500;
+  font-size: 20px;
+}
 .list-item {
-  border: 1px solid #666;
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 10px;
+  padding: 7px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   cursor: pointer;
+  background: var(--color-1);
+  position: relative;
 }
 .list-item:hover {
-  box-shadow: 0 3px 0 0 #b2b8c4;
+  box-shadow: 0 3px 0 0 var(--color-1);
 }
 .description {
   display: -webkit-box;
@@ -72,6 +81,7 @@ const openTaskPopup = inject('openTaskPopup')
   -webkit-line-clamp: 4;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--white);
 }
 
 /* difficulty */
@@ -115,5 +125,28 @@ const openTaskPopup = inject('openTaskPopup')
 }
 .item-user:not(:last-child) {
   margin-right: -10px;
+}
+
+.open-popup-btn {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.open-popup-btn:focus {
+  outline: 1px solid var(--white);
+  outline-offset: 3px;
+}
+.open-popup-btn img {
+  width: 100%;
+  height: 100%;
+}
+.open-popup-btn:hover img {
+  transform: scale(1.1);
 }
 </style>

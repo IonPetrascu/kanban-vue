@@ -170,7 +170,7 @@ const emit = defineEmits([
   transition:
     transform 0.3s ease-in-out,
     opacity 0.3s ease-in-out;
-
+  border-left: 3px solid var(--color-4);
   overflow: hidden;
 }
 .wrapper-popup > div {
@@ -179,6 +179,7 @@ const emit = defineEmits([
 .active {
   transform: translateX(0%);
   opacity: 1;
+  z-index: 2;
 }
 .hidden {
   transform: translateX(100%);
@@ -195,15 +196,18 @@ const emit = defineEmits([
   width: 100%;
 }
 .close-btn {
-  width: 30px;
-  height: 30px;
-  padding: 0;
+  width: 34px;
+  height: 34px;
+  padding: 7px;
   border: none;
   background: transparent;
   cursor: pointer;
+  background-color: var(--color-3);
+  border-radius: 50%;
 }
 .close-btn img {
   width: 100%;
+  height: 100%;
 }
 .task-title {
   color: var(--color-3);
@@ -309,7 +313,7 @@ label {
 }
 .user-btn:focus {
   outline: 1px solid var(--white);
-  outline-offset: 0px;
+  outline-offset: 3px;
 }
 
 .users-popup {
@@ -339,6 +343,7 @@ label {
   flex-wrap: wrap;
   gap: 10px;
   padding-left: 5px;
+  align-content: baseline;
 }
 .user-list-board li,
 .user-list-board button {
@@ -402,6 +407,10 @@ label {
   width: 100%;
   text-align: center;
   border-radius: 10px;
+}
+.select:focus {
+  outline: 1px solid var(--white);
+  outline-offset: 3px;
 }
 .option {
   background: var(--white);

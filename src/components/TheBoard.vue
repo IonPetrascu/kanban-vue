@@ -2,7 +2,7 @@
 import ColumnBoard from './ColumnBoard.vue'
 import type { Category } from '../types'
 
-const props = defineProps<{
+defineProps<{
   categories: Category[]
 }>()
 </script>
@@ -14,9 +14,10 @@ const props = defineProps<{
 <style scoped>
 .board {
   width: 100%;
-  background: whitesmoke;
+  background: var(--color-2);
   display: flex;
   overflow-x: auto;
-  height: 100%;
+  flex: 1;
+  padding-inline: 20px;
 }
 </style>
