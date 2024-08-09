@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, ref } from 'vue'
+import { inject, ref } from 'vue'
 import TaskList from './TaskList.vue'
 import type { Category } from '../types'
 
@@ -32,32 +32,18 @@ const quantityTasksInBoard = inject('quantityTasksInBoard')
   <div class="col">
     <div class="col-header">
       <h2>{{ category.title }}</h2>
-      <span>{{ quantityTasksInBoard(category.id) }}</span>
+      <span>( {{ quantityTasksInBoard(category.id) }} )</span>
+      <button v-if="!showAddTaskForm" @click="openTaskForm" class="add-task">
+        <img src="/src/assets/plus.svg" alt="add button" />
+      </button>
     </div>
     <div>
-      <button v-if="!showAddTaskForm" @click="openTaskForm" class="add-task">
-        <img src="/src/assets/plus.svg" alt="add button" /> <span>Add new task</span>
-      </button>
       <form v-if="showAddTaskForm" class="add-task-form" @submit.prevent="addNewTask">
-        <textarea v-model="taskTitle" name="textarea"></textarea>
+        <input v-model="taskTitle" name="input" />
         <div class="add-task-buttons">
-          <button type="sumbit" class="add-task-btn">Add new task</button>
+          <button type="sumbit" class="add-task-btn">Add New Task</button>
           <button @click="closeTaskForm" type="button" class="close-task-btn">
-            <svg
-              width="24"
-              height="24"
-              role="presentation"
-              focusable="false"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12Z"
-                fill="currentColor"
-              ></path>
-            </svg>
+            <img src="/src/assets/close.svg" alt="close" />
           </button>
         </div>
       </form>
@@ -71,44 +57,46 @@ const quantityTasksInBoard = inject('quantityTasksInBoard')
   border-radius: 4px;
   display: flex;
   flex-direction: column;
-  width: clamp(300px, 100%, 300px);
-  border-right: 1px solid #666;
+  width: 300px;
+  min-width: 300px;
+  background-color: var(--color-2);
 }
 
 .col-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 20px;
   margin-bottom: 20px;
 }
 .col-header span {
   padding: 2px;
   font-weight: 600;
   font-size: 20px;
+  color: var(--white);
 }
 h2 {
   text-align: center;
+  color: var(--white);
 }
 
 /* add task */
 .add-task {
   border: none;
-  width: 100%;
   display: flex;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
-  border-radius: 10px;
-  padding: 5px;
-  margin-bottom: 15px;
+  border-radius: 20px;
+  padding: 7px;
   cursor: pointer;
-  background: transparent;
-  border: 1px solid rgb(211, 208, 208);
+  background: var(--color-3);
   transition:
     background-color 0.4s ease,
     scale 0.3s ease;
+  margin-left: auto;
+  transition: transform 0.2s ease;
 }
 .add-task:hover {
-  background-color: rgb(224, 224, 224);
+  transform: scale(1.1);
 }
 .add-task img {
   width: 20px;
@@ -117,24 +105,31 @@ h2 {
 
 .add-task span {
   font-size: 20px;
+  color: var(--white);
 }
 .add-task-form {
   margin-bottom: 15px;
 }
-.add-task-form textarea {
+.add-task-form input {
+  overflow-wrap: break-word;
+  padding: 10px 8px;
+  background-color: var(--color-2);
+  border: none;
+  color: var(--white);
+  border: 1px solid var(--white);
+  border-radius: 10px;
   width: 100%;
   resize: none;
-  margin: 0;
-  padding: 8px 12px;
-  overflow: hidden;
   overflow-y: auto;
-  border: none;
-  border-radius: 8px;
-  background-color: var(--ds-surface-raised, #ffffff);
-  box-shadow: var(--ds-shadow-raised, 0px 1px 1px #091e4240, 0px 0px 1px #091e424f);
-  resize: none;
-  overflow-wrap: break-word;
+  font-size: 16px;
 }
+
+.add-task-form input:focus {
+  outline: 1px solid var(--white);
+  outline-offset: 3px;
+  background-color: var(--color-1);
+}
+
 .add-task-buttons {
   display: flex;
   align-items: center;
@@ -142,15 +137,24 @@ h2 {
   margin-top: 15px;
 }
 .add-task-btn {
-  padding: 10px;
-  background: #6ee7b7;
-  border-radius: 8px;
+  padding: 10px 15px;
+  background: var(--color-3);
+  color: var(--white);
+  border-radius: 20px;
   border: none;
+  cursor: pointer;
 }
 .close-task-btn {
-  height: 24px;
-  width: 24px;
-  padding: 0;
+  width: 34px;
+  height: 34px;
+  padding: 7px;
   border: none;
+  cursor: pointer;
+  background-color: var(--color-3);
+  border-radius: 50%;
+}
+.close-task-btn img {
+  width: 100%;
+  height: 100%;
 }
 </style>
