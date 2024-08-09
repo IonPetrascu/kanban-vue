@@ -3,6 +3,13 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+
+  --white: #ffffff;
+  --color-1: #343442;
+  --color-2: #21212d;
+  --color-3: #8673f3;
+  --color-4: #828ea0;
+  --color-4: #ffffff;
 }
 
 * {
