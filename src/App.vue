@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { provide, ref } from 'vue'
 import TheBoard from './components/TheBoard.vue'
+import TaskPopup from './components/TaskPopup.vue'
 import type { Item, Category, User } from './types'
 
 const items = ref<Item[]>([
@@ -52,8 +53,16 @@ const users = ref<User[]>([
     id: 1,
     name: 'Ana',
     email: 'ana@gmail.com'
+  },
+  {
+    id: 2,
+    name: 'Diva',
+    email: 'divaSaya@gmail.com'
   }
 ])
+
+const isVisibleTaskPopup = ref<boolean>(false)
+const currentTaskInPopup = ref<Item | null>(null)
 
 const quantityTasksInBoard = (categoryId: number): number => {
   return items.value.reduce(
@@ -92,11 +101,63 @@ const addTask = (categoryId: number, title: string): void | undefined => {
   })
 }
 
-provide('quantityTasksInBoard', quantityTasksInBoard)
-provide('addTask', addTask)
+const openTaskPopup = (taskId: number): void => {
+  const findTask = items.value.find((el) => el.id === taskId)
+  if (findTask) {
+    currentTaskInPopup.value = findTask
+    isVisibleTaskPopup.value = true
+  }
+}
+
+const closeTaskPopup = (): void => {
+  isVisibleTaskPopup.value = false
+  currentTaskInPopup.value = null
+}
+
+const getTaskMembers = (usersId: number[]): User[] => {
+  return users.value.filter((user) => usersId.includes(user.id))
+}
+
+const addUserToTask = (userId: number): void => {
+  if (!currentTaskInPopup.value) return
+
+  const existingUsers = currentTaskInPopup.value.usersId || []
+  if (!existingUsers.includes(userId)) {
+    currentTaskInPopup.value.usersId = [...existingUsers, userId]
+  }
+}
+
+const removeUserFromTask = (userId: number): void => {
+  if (currentTaskInPopup.value) {
+    currentTaskInPopup.value.usersId = currentTaskInPopup.value.usersId?.filter(
+      (id) => id !== userId
+    )
+  }
+}
+
+const updateCategory = (categoryId: number): void => {
+  if (currentTaskInPopup.value) {
+    currentTaskInPopup.value.categoryId = categoryId
+  }
+}
+
+const updateTitle = (title: string): void => {
+  if (currentTaskInPopup.value) currentTaskInPopup.value.title = title
+}
+
+const updateDescription = (description: string): void => {
+  if (currentTaskInPopup.value) currentTaskInPopup.value.description = description
+}
+
+provide('users', users)
 provide('items', items)
+provide('categories', categories)
+provide('quantityTasksInBoard', quantityTasksInBoard)
+provide('getTaskMembers', getTaskMembers)
+provide('openTaskPopup', openTaskPopup)
 provide('getUserById', getUserById)
 provide('ondragstart', ondragstart)
+provide('addTask', addTask)
 provide('onDrop', onDrop)
 </script>
 
@@ -116,6 +177,18 @@ provide('onDrop', onDrop)
       <TheBoard :categories="categories" />
     </div>
   </div>
+  <TaskPopup
+    :users="users"
+    :task="currentTaskInPopup"
+    :isVisible="isVisibleTaskPopup"
+    @close-popup="closeTaskPopup"
+    @get-user-by-id="getUserById"
+    @remove-user-from-task="removeUserFromTask"
+    @add-user-to-task="addUserToTask"
+    @update-category="updateCategory"
+    @update-title="updateTitle"
+    @update-description="updateDescription"
+  />
 </template>
 
 <style scoped>
