@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, inject, ref, watch } from 'vue'
-import type { Item, User, Category } from '../types'
+import type { Item, User, Category, Difficulty } from '../types'
 
 // Props
 const props = defineProps<{
@@ -58,7 +58,9 @@ watch(currentDescription, () => emit('updateDescription', currentDescription.val
 
 // Injected Dependencies
 const getUserById = inject<(id: number) => User | undefined>('getUserById')
+const changeDifficultyOfTask = inject<(id: string) => void>('changeDifficultyOfTask')
 const categories = inject<Category[]>('categories')
+const difficulties = inject<Difficulty[]>('difficulties')
 
 if (!getUserById) {
   throw new Error('getUserById injection is missing')
@@ -139,20 +141,33 @@ const emit = defineEmits([
               <span class="empty-list" v-else>No results :(</span>
             </div>
           </div>
-          <div class="select-wrapper">
-            <h4 class="title">Status</h4>
-            <select class="select" v-model="currentCategory">
-              <option
-                class="option"
-                :key="category.id"
-                :value="category.id"
-                v-for="category in categories"
+        </div>
+        <div class="select-wrapper">
+          <h4 class="title">Status</h4>
+          <select class="select" v-model="currentCategory">
+            <option
+              class="option"
+              :key="category.id"
+              :value="category.id"
+              v-for="category in categories"
+            >
+              {{ category.title }}
+              {{ currentCategory }}
+            </option>
+          </select>
+        </div>
+        <div class="difficulty-wrapper">
+          <h4 data-v-096e9cac="" class="title">Difficulty</h4>
+          <ul>
+            <li :key="difficulty" v-for="difficulty in difficulties">
+              <button
+                @click="changeDifficultyOfTask && changeDifficultyOfTask(difficulty)"
+                :class="['difficulty-btn', { 'difficulty-active': difficulty === task.difficulty }]"
               >
-                {{ category.title }}
-                {{ currentCategory }}
-              </option>
-            </select>
-          </div>
+                {{ difficulty }}
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -415,5 +430,30 @@ label {
 .option {
   background: var(--white);
   padding: 5px;
+}
+.difficulty-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.difficulty-wrapper ul {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.difficulty-btn {
+  color: var(--white);
+  background: none;
+  border: none;
+  padding: 10px;
+  border-radius: 20px;
+  background: var(--color-1);
+  cursor: pointer;
+}
+.difficulty-btn:hover {
+  background-color: var(--color-3);
+}
+.difficulty-active {
+  background-color: var(--color-3);
 }
 </style>
