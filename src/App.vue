@@ -169,6 +169,11 @@ const changeTaskTitle = (columnID: number, newTitle: string): void => {
   findCategory.title = newTitle ? newTitle : findCategory.title
 }
 
+const createNewColumn = () => {
+  const date = new Date()
+  const id = date.getTime()
+  categories.value = [...categories.value, { id: id, title: 'New column' }]
+}
 provide('users', users)
 provide('items', items)
 provide('categories', categories)
@@ -229,7 +234,7 @@ provide('onDrop', onDrop)
     @update-title="updateTitle"
     @update-description="updateDescription"
   />
-  <button class="add-col-btn">
+  <button @click="createNewColumn" class="add-col-btn">
     <img src="/src/assets/plus.svg" alt="plus" />
   </button>
 </template>
