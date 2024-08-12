@@ -14,10 +14,11 @@ defineProps<{
 <style scoped>
 .board {
   width: 100%;
-  background: var(--color-2);
   display: flex;
   overflow-x: auto;
   flex: 1;
-  padding-inline: 20px;
+  padding-inline: 10px;
+  gap: 10px;
+  padding-top: 10px;
 }
 </style>

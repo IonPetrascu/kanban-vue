@@ -292,6 +292,7 @@ provide('onDrop', onDrop)
   width: 80%;
   display: flex;
   flex-direction: column;
+  background: url('./assets/bg-1.jpg') center / cover no-repeat;
 }
 .header {
   background: var(--color-1);

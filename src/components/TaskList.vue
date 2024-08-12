@@ -53,7 +53,6 @@ const openTaskPopup = inject('openTaskPopup')
   display: flex;
   flex-direction: column;
   gap: 20px;
-  background: var(--color-2);
   flex: 1;
   overflow-y: auto;
 }
@@ -71,9 +70,20 @@ const openTaskPopup = inject('openTaskPopup')
   cursor: pointer;
   background: var(--color-1);
   position: relative;
+  animation-name: animation;
+  animation-duration: 0.2s;
+}
+
+@keyframes animation {
+  0% {
+    transform: translateY(50px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 .list-item:hover {
-  box-shadow: 0 3px 0 0 var(--color-1);
+  box-shadow: 0 3px 0 0 var(--color-4);
 }
 .description {
   display: -webkit-box;

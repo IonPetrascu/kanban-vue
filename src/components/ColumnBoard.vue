@@ -82,7 +82,18 @@ const quantityTasksInBoard = inject('quantityTasksInBoard')
   flex-direction: column;
   width: 300px;
   min-width: 300px;
-  background-color: var(--color-2);
+  background: var(--color-6);
+  animation-name: animationColumn;
+  animation-duration: 1s;
+}
+
+@keyframes animationColumn {
+  0% {
+    transform: translateX(100px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
 }
 
 .col-header {
