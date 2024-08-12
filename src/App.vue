@@ -157,6 +157,18 @@ const changeDifficultyOfTask = (difficulty: Difficulty): void => {
   task.difficulty = task.difficulty === difficulty ? ('' as Difficulty) : difficulty
 }
 
+const changeTaskTitle = (columnID: number, newTitle: string): void => {
+  const findCategory = categories.value.find((el) => el.id === columnID)
+  console.log(categories.value.find((el) => el.id === columnID))
+
+  if (!findCategory) {
+    console.log('error')
+
+    return
+  }
+  findCategory.title = newTitle ? newTitle : findCategory.title
+}
+
 provide('users', users)
 provide('items', items)
 provide('categories', categories)
@@ -165,6 +177,7 @@ provide('quantityTasksInBoard', quantityTasksInBoard)
 provide('changeDifficultyOfTask', changeDifficultyOfTask)
 provide('getTaskMembers', getTaskMembers)
 provide('openTaskPopup', openTaskPopup)
+provide('changeTaskTitle', changeTaskTitle)
 provide('getUserById', getUserById)
 provide('ondragstart', ondragstart)
 provide('addTask', addTask)
