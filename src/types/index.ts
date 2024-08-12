@@ -17,3 +17,5 @@ export type User = {
   name: string
   email: string
 }
+
+export type Difficulty = 'low' | 'medium' | 'high'

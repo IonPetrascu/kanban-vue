@@ -2,7 +2,7 @@
 import { provide, ref } from 'vue'
 import TheBoard from './components/TheBoard.vue'
 import TaskPopup from './components/TaskPopup.vue'
-import type { Item, Category, User } from './types'
+import type { Item, Category, User, Difficulty } from './types'
 
 const items = ref<Item[]>([
   {
@@ -60,6 +60,7 @@ const users = ref<User[]>([
     email: 'divaSaya@gmail.com'
   }
 ])
+const difficulties = ref<Difficulty[]>(['low', 'medium', 'high'])
 
 const isVisibleTaskPopup = ref<boolean>(false)
 const currentTaskInPopup = ref<Item | null>(null)
@@ -149,10 +150,19 @@ const updateDescription = (description: string): void => {
   if (currentTaskInPopup.value) currentTaskInPopup.value.description = description
 }
 
+const changeDifficultyOfTask = (difficulty: Difficulty): void => {
+  const task = currentTaskInPopup.value
+  if (!task) return
+
+  task.difficulty = task.difficulty === difficulty ? ('' as Difficulty) : difficulty
+}
+
 provide('users', users)
 provide('items', items)
 provide('categories', categories)
+provide('difficulties', difficulties)
 provide('quantityTasksInBoard', quantityTasksInBoard)
+provide('changeDifficultyOfTask', changeDifficultyOfTask)
 provide('getTaskMembers', getTaskMembers)
 provide('openTaskPopup', openTaskPopup)
 provide('getUserById', getUserById)
