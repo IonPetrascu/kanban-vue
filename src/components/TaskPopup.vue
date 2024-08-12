@@ -152,7 +152,6 @@ const emit = defineEmits([
               v-for="category in categories"
             >
               {{ category.title }}
-              {{ currentCategory }}
             </option>
           </select>
         </div>
@@ -430,6 +429,11 @@ label {
 .option {
   background: var(--white);
   padding: 5px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .difficulty-wrapper {
   display: flex;

@@ -157,6 +157,23 @@ const changeDifficultyOfTask = (difficulty: Difficulty): void => {
   task.difficulty = task.difficulty === difficulty ? ('' as Difficulty) : difficulty
 }
 
+const changeTaskTitle = (columnID: number, newTitle: string): void => {
+  const findCategory = categories.value.find((el) => el.id === columnID)
+  console.log(categories.value.find((el) => el.id === columnID))
+
+  if (!findCategory) {
+    console.log('error')
+
+    return
+  }
+  findCategory.title = newTitle ? newTitle : findCategory.title
+}
+
+const createNewColumn = () => {
+  const date = new Date()
+  const id = date.getTime()
+  categories.value = [...categories.value, { id: id, title: 'New column' }]
+}
 provide('users', users)
 provide('items', items)
 provide('categories', categories)
@@ -165,6 +182,7 @@ provide('quantityTasksInBoard', quantityTasksInBoard)
 provide('changeDifficultyOfTask', changeDifficultyOfTask)
 provide('getTaskMembers', getTaskMembers)
 provide('openTaskPopup', openTaskPopup)
+provide('changeTaskTitle', changeTaskTitle)
 provide('getUserById', getUserById)
 provide('ondragstart', ondragstart)
 provide('addTask', addTask)
@@ -216,7 +234,7 @@ provide('onDrop', onDrop)
     @update-title="updateTitle"
     @update-description="updateDescription"
   />
-  <button class="add-col-btn">
+  <button @click="createNewColumn" class="add-col-btn">
     <img src="/src/assets/plus.svg" alt="plus" />
   </button>
 </template>
@@ -274,6 +292,7 @@ provide('onDrop', onDrop)
   width: 80%;
   display: flex;
   flex-direction: column;
+  background: url('./assets/bg-1.jpg') center / cover no-repeat;
 }
 .header {
   background: var(--color-1);
