@@ -19,6 +19,7 @@ export type User = {
 }
 
 export type Difficulty = 'low' | 'medium' | 'high'
+export type HexColor = `#${string}`
 
 export type Dashboard = {
   id: number
@@ -26,4 +27,6 @@ export type Dashboard = {
   columns: Column[]
   difficulty: Difficulty[]
   users: User[]
+  background?: HexColor
+  useColorForBg: Boolean
 }

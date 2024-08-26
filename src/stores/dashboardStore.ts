@@ -31,7 +31,9 @@ export const useDashboardStore = defineStore('dashboard', () => {
           name: 'Diva',
           email: 'divaSaya@gmail.com'
         }
-      ]
+      ],
+      background: '#2b2b36',
+      useColorForBg: false
     },
     {
       id: 1,
@@ -77,7 +79,9 @@ export const useDashboardStore = defineStore('dashboard', () => {
           name: 'Diva',
           email: 'divaSaya@gmail.com'
         }
-      ]
+      ],
+      background: '#2b2b36',
+      useColorForBg: true
     },
     {
       id: 2,
@@ -100,7 +104,9 @@ export const useDashboardStore = defineStore('dashboard', () => {
           name: 'Diva',
           email: 'divaSaya@gmail.com'
         }
-      ]
+      ],
+      background: '#2b2b36',
+      useColorForBg: true
     }
   ])
 
@@ -267,7 +273,9 @@ export const useDashboardStore = defineStore('dashboard', () => {
       title: 'New Dashboard',
       columns: [],
       difficulty: ['low', 'medium', 'high'],
-      users: []
+      users: [],
+      background: '#2b2b36',
+      useColorForBg: false
     }
 
     dashboards.value.push(newDashboard)
