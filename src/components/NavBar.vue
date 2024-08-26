@@ -62,6 +62,7 @@ const route = useRoute()
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   cursor: pointer;
+  overflow: hidden;
 }
 .nav ul li:hover {
   background-color: var(--color-3);
@@ -88,6 +89,7 @@ const route = useRoute()
 
 .bar {
   min-width: 250px;
+  max-width: 250px;
   background: var(--color-1);
   border-right: 3px solid var(--color-4);
 }

@@ -14,7 +14,9 @@ const dashboard = computed(() => dashboardStore.dashboards.find((d) => d.id === 
 const showTaskEditor = ref<boolean>(false)
 const isVisibleTaskEditor = computed(() => dashboardStore.currentTask !== null)
 const colorBoard = ref<HexColor>('#2b2b36')
-const showSettings = ref(false)
+const showSettings = ref<boolean>(false)
+const isEditingTitleOfDashboard = ref<boolean>(false)
+const newDashboardTitle = ref<string>('')
 
 watch(
   () => dashboardId.value,
@@ -23,11 +25,16 @@ watch(
     closeTaskEdior()
     colorBoard.value = dashboard.value?.background ?? colorBoard.value
     showSettings.value = false
+    newDashboardTitle.value = dashboard.value?.title ?? ''
+    isEditingTitleOfDashboard.value = false
   }
 )
+
+watch(newDashboardTitle, () => dashboardStore.changeDashboardTitle(newDashboardTitle.value))
 onMounted(() => {
   dashboardStore.setCurrentDashboardId(Number(dashboardId.value))
   colorBoard.value = dashboard.value?.background ?? colorBoard.value
+  newDashboardTitle.value = dashboard.value?.title ?? ''
 })
 
 const closeTaskEdior = (): void => {
@@ -48,6 +55,12 @@ const changeColor = (): void => {
   dashboard.value.background = colorBoard.value
 }
 
+const toggleTitleEditing = (): void => {
+  isEditingTitleOfDashboard.value = true
+}
+const stopEditingTitleOfDashboard = () => {
+  isEditingTitleOfDashboard.value = false
+}
 provide('openTaskEditor', openTaskEditor)
 </script>
 <template>
@@ -59,9 +72,21 @@ provide('openTaskEditor', openTaskEditor)
   >
     <div :class="{ activeHeader: showSettings }" class="header">
       <div class="header-top">
-        <h2>
-          {{ dashboard?.title }}
-        </h2>
+        <div class="title-wrapper">
+          <h2 v-if="!isEditingTitleOfDashboard">
+            {{ dashboard?.title }}
+          </h2>
+          <input
+            @blur="stopEditingTitleOfDashboard"
+            v-else
+            v-model="newDashboardTitle"
+            type="text"
+          />
+          <button @click="toggleTitleEditing" class="title-edit-btn">
+            <img src="/src/assets/edit.svg" alt="edit" />
+          </button>
+        </div>
+
         <div>
           <button class="setting-btn" @click="toggleSettingsDashboard">
             <img src="/src/assets/settings.svg" alt="settings" />
@@ -184,5 +209,38 @@ header h2 {
 }
 .add-col-btn img {
   width: 100%;
+}
+.title-wrapper {
+  display: flex;
+  gap: 10px;
+}
+.title-wrapper h2 {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.title-wrapper input {
+  padding: 10px 8px;
+  background-color: var(--color-2);
+  border: none;
+  color: var(--white);
+  border: 1px solid var(--white);
+  border-radius: 10px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.title-edit-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.title-edit-btn img {
+  transition: all 0.2s ease;
+}
+.title-edit-btn:hover img {
+  scale: 1.06;
+  transform: rotate(-8deg);
 }
 </style>

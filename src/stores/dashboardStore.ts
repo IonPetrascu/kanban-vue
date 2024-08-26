@@ -281,6 +281,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
     dashboards.value.push(newDashboard)
   }
 
+  const changeDashboardTitle = (newTitle: string): void => {
+    const dashboard = findDashboard()
+    if (!dashboard) return
+    dashboard.title = newTitle
+  }
   return {
     dashboards,
     currentTask,
@@ -299,6 +304,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     changeColumnOfTask,
     changeTaskTitle,
     createNewColumn,
-    createNewDashboard
+    createNewDashboard,
+    changeDashboardTitle
   }
 })
