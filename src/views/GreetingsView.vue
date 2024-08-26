@@ -23,7 +23,7 @@
   background-color: var(--color-1);
   text-align: center;
   padding: 20px;
-  width: 80%;
+  width: 100%;
 }
 .wrapper {
   margin: 0 auto;
