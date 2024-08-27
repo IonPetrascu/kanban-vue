@@ -1,0 +1,121 @@
+[
+  {
+    "id": 0,
+    "title": "Frontend",
+    "columns": [
+      {
+        "id": 0,
+        "title": "To Do",
+        "tasks": []
+      }
+    ],
+    "difficulty": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "users": [
+      {
+        "id": 0,
+        "name": "Andrei",
+        "email": "andreipiatra@gmail.com"
+      },
+      {
+        "id": 1,
+        "name": "Ana",
+        "email": "ana@gmail.com"
+      },
+      {
+        "id": 2,
+        "name": "Diva",
+        "email": "divaSaya@gmail.com"
+      }
+    ],
+    "background": "#2b2b36",
+    "useColorForBg": false
+  },
+  {
+    "id": 1,
+    "title": "Home",
+    "columns": [
+      {
+        "id": 0,
+        "title": "To Do",
+        "tasks": [
+          {
+            "id": 0,
+            "title": "new task",
+            "difficulty": "low",
+            "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            "usersId": [
+              0,
+              1
+            ]
+          },
+          {
+            "id": 44,
+            "title": "new task",
+            "difficulty": "low",
+            "description": "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+            "usersId": [
+              1
+            ]
+          }
+        ]
+      }
+    ],
+    "difficulty": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "users": [
+      {
+        "id": 0,
+        "name": "Andrei",
+        "email": "andreipiatra@gmail.com"
+      },
+      {
+        "id": 1,
+        "name": "Ana",
+        "email": "ana@gmail.com"
+      },
+      {
+        "id": 2,
+        "name": "Diva",
+        "email": "divaSaya@gmail.com"
+      }
+    ],
+    "background": "#2b2b36",
+    "useColorForBg": true
+  },
+  {
+    "id": 2,
+    "title": "Training",
+    "columns": [],
+    "difficulty": [
+      "low",
+      "medium",
+      "high"
+    ],
+    "users": [
+      {
+        "id": 0,
+        "name": "Andrei",
+        "email": "andreipiatra@gmail.com"
+      },
+      {
+        "id": 1,
+        "name": "Ana",
+        "email": "ana@gmail.com"
+      },
+      {
+        "id": 2,
+        "name": "Diva",
+        "email": "divaSaya@gmail.com"
+      }
+    ],
+    "background": "#2b2b36",
+    "useColorForBg": true
+  }
+]

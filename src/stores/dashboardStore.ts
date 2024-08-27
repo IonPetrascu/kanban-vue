@@ -286,6 +286,21 @@ export const useDashboardStore = defineStore('dashboard', () => {
     if (!dashboard) return
     dashboard.title = newTitle
   }
+
+  const fetchData = async (): Promise<void> => {
+    try {
+      const response = await fetch('http://localhost:3000/data')
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const data = await response.json()
+      console.log(data)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
+  }
+
   return {
     dashboards,
     currentTask,
@@ -305,6 +320,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     changeTaskTitle,
     createNewColumn,
     createNewDashboard,
-    changeDashboardTitle
+    changeDashboardTitle,
+    fetchData
   }
 })

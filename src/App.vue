@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { onBeforeMount } from 'vue'
 import NavBar from './components/NavBar.vue'
 import { useDashboardStore } from './stores/dashboardStore'
 const dashboard = useDashboardStore()
+
+onBeforeMount(() => {
+  dashboard.fetchData()
+})
 </script>
 
 <template>
