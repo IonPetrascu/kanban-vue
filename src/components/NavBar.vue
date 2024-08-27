@@ -63,9 +63,13 @@ const route = useRoute()
   border-bottom-right-radius: 20px;
   cursor: pointer;
   overflow: hidden;
+  background: linear-gradient(to right, var(--color-3) 50%, transparent 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.2s ease-in-out;
 }
 .nav ul li:hover {
-  background-color: var(--color-3);
+  background-position: 0% 0;
 }
 .nav ul .active-board {
   background-color: var(--color-3);
